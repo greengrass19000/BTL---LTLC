@@ -16,4 +16,4 @@ Sound resource : https://www.sounds-resource.com/arcade/pacman/sound/10603/
 - Monster (0%)
 - Startup và Endgame (0%)
 
-
+P/S : Do thiếu kinh nghiệm về cả SDL kết hợp một thời gian dài không code nên các source của game em đều hardcode @@ 
