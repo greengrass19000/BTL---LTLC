@@ -1,14 +1,3 @@
-SDL_Rect Pac[ 4 ][ 4 ];
-int pdir = 0;
-int tmpdir = -1;
-// int pacx = 209;
-// int pacy = 411;
-int pacx = 379;
-int pacy = 411;
-int dpx[] = {1, 0, -1, 0};
-int dpy[] = {0, 1, 0, -1};
-bool dirchanged = false;
-SDL_Rect sdead[11];
 void initpacman() {
 	//left
 	Pac[ 2 ][ 0 ].x =  2;
@@ -94,35 +83,28 @@ void initpacman() {
 	Pac[ 3 ][ 3 ].w =  26;
 	Pac[ 3 ][ 3 ].h =  26;	
 		
-	sdead[0] = {98, 6, 25, 25};
-	sdead[0] = {128, 6, 29, 25};
-	sdead[0] = {160, 6, 29, 25};
-	sdead[0] = {192, 6, 29, 25};
-	sdead[0] = {224, 6, 29, 25};
-	sdead[0] = {256, 6, 29, 25};
-	sdead[0] = {290, 6, 29, 25};
-}
-
-bool check(int dir) {
-	return true;
-}
-
-int px(int dir) {
-	return dpx[dir];
-}
-
-int py(int dir) {
-	return dpy[dir];
+	pdead[0] = {98, 6, 25, 25};
+	pdead[1] = {128, 6, 29, 25};
+	pdead[2] = {160, 6, 29, 25};
+	pdead[3] = {192, 6, 29, 25};
+	pdead[4] = {224, 6, 29, 25};
+	pdead[5] = {256, 6, 29, 25};
+	pdead[6] = {288, 6, 29, 25};
+	pdead[7] = {320, 6, 29, 25};
+	pdead[8] = {352, 6, 29, 25};
+	pdead[9] = {384, 6, 29, 25};
+	pdead[10] = {421, 6, 29, 25};
 }
 
 bool pmove(int dir) {
-	if(pcanmove(pacx + px(dir), pacy + py(dir), pacx + px(dir) + 25, pacy + py(dir) + 25)) {
-		pacx += px(dir);
-		pacy += py(dir);
+	if(pcanmove(pacx + dpx[dir], pacy + dpy[dir], pacx + dpx[dir] + 25, pacy + dpy[dir] + 25)) {
+		pacx += dpx[dir];
+		pacy += dpy[dir];
 		return true;
 	} 
 	return false;
 }
+
 void getpacman(int frame, LTexture &gSrc) {
 	if(!dirchanged && !pmove(pdir)) frame = 1;
 	SDL_Rect* pacman = &Pac[ pdir ][ frame ];
@@ -155,19 +137,36 @@ void checklastmove() {
 	}
 }
 
-
-void Die() {
-	Mix_PlayMusic(sdead, -1);
-	
-	//play die.mp3
-	
-	//display eploding pacman
-	
-	//lose a live
-	
+void pdie(LTexture &gSrc) {
+	gSrc.render(pacx, pacy + 3, &pdead[death / 12]);
 }
 
-void Startup() {
-	//spawn in the ball shape
-	
+void scan() {
+	xy[0] = {pacx, pacy};
+	dd[pacx + 26][pacy] = 1;
+	cnt = 1;
+	for(int times = 0; times < cnt; ++times) {
+		int x = xy[times].first + 26;
+		int y = xy[times].second;
+		if(d[x][y] == chaseradius) break;
+		for(int i = 0; i < 4; ++i) if(ve[x][y][i]) if(!dd[x + dpx[i]][y + dpy[i]]) {
+			int x2 = x + dpx[i];
+			if(x2 > SCREEN_WIDTH + 26) x2 = 0;
+			else if(x2 < 0) x2 = SCREEN_WIDTH + 26;
+			dd[x2][y + dpy[i]] = 1 + (i ^ 2);
+			d[x2][y + dpy[i]] = d[x][y] + 1;
+			xy[cnt++] = {x2 - 26, y + dpy[i]};
+		}
+	}
+}
+
+void unscan() {
+	for(int i = 0; i < cnt; ++i) {
+		dd[xy[i].first + 26][xy[i].second] = 0;
+		d[xy[i].first + 26][xy[i].second] = 0;
+	}
+}
+
+void pstart(LTexture &gSrc) {
+	gSrc.render(pacx, pacy, &Pac[0][2]);
 }
