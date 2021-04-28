@@ -6,8 +6,11 @@
 *
 
 *Tài liệu tham khảo :
+
 Nguồn của code liên quan đến SDL : https://lazyfoo.net/tutorials/SDL/ (các code ở đây em chỉ đọc hiểu rồi paste trực tiếp vào code của mình)
+
 Image resource : http://labs.phaser.io/assets/games/pacman/ 
+
 Sound resource : https://www.sounds-resource.com/arcade/pacman/sound/10603/
 
 P/S : Do thiếu kinh nghiệm về cả SDL kết hợp một thời gian dài không code nên các source của game em đều hardcode @@ 
