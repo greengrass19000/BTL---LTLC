@@ -1,5 +1,5 @@
 *Bài tập lớn môn lập trình nâng cao 
-  - Name : Nguyễn Bá Nam Dũng
+  - Tên : Nguyễn Bá Nam Dũng
   - MSV : 20020040 
 
 *GAME : PACMAN
